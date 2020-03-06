@@ -545,7 +545,11 @@ def split_textline(table, textline, direction, flag_size=False, strip_text=""):
                         else:
                             # TODO: add test
                             if cut == x_cuts[-1]:
-                                cut_text.append((r, cut[0] + 1, obj))
+                                # fallback in case there is no extra column to the right which is almost always AFAIK
+                                if len(table.cells[r]) <= cut[0] + 1:
+                                    cut_text.append((r, cut[0], obj))
+                                else:
+                                    cut_text.append((r, cut[0] + 1, obj))
                     elif isinstance(obj, LTAnno):
                         cut_text.append((r, cut[0], obj))
         elif direction == "vertical" and not textline.is_empty():
